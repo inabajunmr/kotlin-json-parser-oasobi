@@ -22,7 +22,7 @@ class Parser(input: String) {
         val values = ArrayList<Node>()
         while(true) {
             values.add(parse())
-            if (l.peekNextTokenType() is CommaToken){
+            if (l.isNextComma()){
                 l.getNextToken()
                 continue
             }
@@ -46,7 +46,7 @@ class Parser(input: String) {
             }
 
             values[key] = parse()
-            if (l.peekNextTokenType() is CommaToken){
+            if (l.isNextComma()){
                 l.getNextToken()
                 continue
             }

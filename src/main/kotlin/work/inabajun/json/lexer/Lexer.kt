@@ -6,49 +6,20 @@ class Lexer(input: String) {
 
     var index = 0
 
-
-    /**
-     * Return only token type(without value).
-     */
-    fun peekNextTokenType(): Token {
-        // TODO refactor
+    fun isNextComma(): Boolean {
 
         if (input.length <= index) {
-            return EOFToken
+            return false
         }
 
         return when (val c = input[index]) {
             ' ', '\n', '\r', '\t' -> {
                 // skip whitespace
                 index++
-                return peekNextTokenType()
+                return isNextComma()
             }
-            '{' -> LParenToken
-            '}' -> RParenToken
-            '[' -> LBracketToken
-            ']' -> LBracketToken
-            ',' -> CommaToken
-            ':' -> ColonToken
-            '"' -> StringToken("")
-            else -> {
-                if (isNull()) {
-                    return NullToken
-                }
-
-                if (isTrue()) {
-                    return TrueToken
-                }
-
-                if (isFalse()) {
-                    return FalseToken
-                }
-
-                if (c in '0'..'9' || c == '+' || c == '-') {
-                    return NumberToken(Double.MAX_VALUE)
-                }
-
-                throw LexerException("Unexpected value:$c.")
-            }
+            ',' -> true
+            else -> false
 
         }
     }
