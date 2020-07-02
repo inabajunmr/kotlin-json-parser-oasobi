@@ -10,8 +10,8 @@ class Parser(input: String) {
             is LParenToken -> parseObject()
             is StringToken -> TextNode(token.value)
             is NumberToken -> NumberNode(token.value)
-            is TrueToken -> BooleanNode(true)
-            is FalseToken -> BooleanNode(false)
+            is TrueToken -> TrueNode
+            is FalseToken -> FalseNode
             is NullToken -> NullNode
             is LBracketToken -> parseArray()
             else -> throw ParserException("TODO")
@@ -20,9 +20,9 @@ class Parser(input: String) {
 
     private fun parseArray(): Node {
         val values = ArrayList<Node>()
-        while(true) {
+        while (true) {
             values.add(parse())
-            if (l.isNextComma()){
+            if (l.isNextComma()) {
                 l.getNextToken()
                 continue
             }
@@ -31,7 +31,7 @@ class Parser(input: String) {
 
         val nextToken = l.getNextToken()
         if (nextToken !is RBracketToken) {
-            throw ParserException("Array must enclose by ']'. ${nextToken.getTokenType().name}")
+            throw ParserException("Array must enclose by ']'. ${nextToken.javaClass.name}")
         }
 
         return ArrayNode(values)
@@ -46,7 +46,7 @@ class Parser(input: String) {
             }
 
             values[key] = parse()
-            if (l.isNextComma()){
+            if (l.isNextComma()) {
                 l.getNextToken()
                 continue
             }

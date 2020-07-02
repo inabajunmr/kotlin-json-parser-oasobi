@@ -1,36 +1,42 @@
 package work.inabajun.json.parser
 
-class ObjectNode(private val values:HashMap<String,Node>):Node {
+class ObjectNode(private val values: HashMap<String, Node>) : Node {
     override fun get(key: String): Node {
         return values[key] ?: throw NodeNotFoundException("Key:${key} is not found.")
     }
 }
 
-class ArrayNode(private val values:ArrayList<Node>) : Node{
+class ArrayNode(private val values: ArrayList<Node>) : Node {
     override fun get(key: Int): Node {
         return values[key]
     }
 }
 
-class TextNode(private val value:String):Node {
+class TextNode(private val value: String) : Node {
     override fun getText(): String {
         return value
     }
 }
 
-class NumberNode(private val value:Double):Node {
-    override fun getDouble() : Double {
+class NumberNode(private val value: Double) : Node {
+    override fun getDouble(): Double {
         return value
     }
 
-    override fun getInt() : Int {
+    override fun getInt(): Int {
         return value.toInt()
     }
 }
 
-class BooleanNode(private val value : Boolean) : Node {
+object TrueNode : Node {
     override fun getBool(): Boolean {
-        return value
+        return true
+    }
+}
+
+object FalseNode : Node {
+    override fun getBool(): Boolean {
+        return false
     }
 }
 
