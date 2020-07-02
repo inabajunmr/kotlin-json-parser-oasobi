@@ -14,7 +14,7 @@ class Parser(input: String) {
             is FalseToken -> FalseNode
             is NullToken -> NullNode
             is LBracketToken -> parseArray()
-            else -> throw ParserException("TODO")
+            else -> throw ParserException("This token:${token.javaClass.name} is undefined.")
         }
     }
 
