@@ -6,6 +6,53 @@ class Lexer(input: String) {
 
     var index = 0
 
+
+    /**
+     * Return only token type(without value).
+     */
+    fun peekNextTokenType(): Token {
+        // TODO refactor
+
+        if (input.length <= index) {
+            return EOFToken
+        }
+
+        return when (val c = input[index]) {
+            ' ', '\n', '\r', '\t' -> {
+                // skip whitespace
+                index++
+                return peekNextTokenType()
+            }
+            '{' -> LParenToken
+            '}' -> RParenToken
+            '[' -> LBracketToken
+            ']' -> LBracketToken
+            ',' -> CommaToken
+            ':' -> ColonToken
+            '"' -> StringToken("")
+            else -> {
+                if (isNull()) {
+                    return NullToken
+                }
+
+                if (isTrue()) {
+                    return TrueToken
+                }
+
+                if (isFalse()) {
+                    return FalseToken
+                }
+
+                if (c in '0'..'9' || c == '+' || c == '-') {
+                    return NumberToken(Double.MAX_VALUE)
+                }
+
+                throw LexerException("Unexpected value:$c.")
+            }
+
+        }
+    }
+
     fun getNextToken(): Token {
 
         if (input.length <= index) {
@@ -21,7 +68,7 @@ class Lexer(input: String) {
             '{' -> LParenToken
             '}' -> RParenToken
             '[' -> LBracketToken
-            ']' -> LBracketToken
+            ']' -> RBracketToken
             ',' -> CommaToken
             ':' -> ColonToken
             '"' -> {
